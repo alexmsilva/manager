@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('equipes', 'EquipeController', ['except' => ['edit', 'create']]);
+Route::resource('jogadores', 'JogadorController', ['only' => ['index']]);
+Route::resource('equipes.jogadores', 'EquipeJogadoresController', ['except' => ['edit', 'create']]);
