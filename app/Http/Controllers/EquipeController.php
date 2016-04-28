@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Equipe;
+
 class EquipeController extends Controller {
 	/**
 	 * Display a listing of the resource.
@@ -11,7 +13,8 @@ class EquipeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		//
+		$equipes = Equipe::all();
+		return response()->json(['data' => $equipes], 200);
 	}
 
 	/**
@@ -31,7 +34,12 @@ class EquipeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		//
+		$equipe = Equipe::find($id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		return response()->json(['data' => $equipe], 200);
 	}
 
 	/**

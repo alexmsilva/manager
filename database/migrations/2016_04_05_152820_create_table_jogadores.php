@@ -3,15 +3,13 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableJogadores extends Migration
-{
+class CreateTableJogadores extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up() {
 		Schema::create('jogadores', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('equipe_id')->unsigned();
@@ -29,8 +27,7 @@ class CreateTableJogadores extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down() {
 		Schema::drop('jogadores');
 	}
 }
