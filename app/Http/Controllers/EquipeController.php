@@ -38,7 +38,7 @@ class EquipeController extends Controller {
 	public function show($id) {
 		$equipe = Equipe::find($id);
 		if (!$equipe) {
-			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+			return response()->json(['message' => 'Este time não existe', 'code' => 404], 404);
 		}
 
 		return response()->json(['data' => $equipe], 200);
@@ -54,7 +54,7 @@ class EquipeController extends Controller {
 	public function update(EquipeRequest $request, $id) {
 		$equipe = Equipe::find($id);
 		if (!$equipe) {
-			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+			return response()->json(['message' => 'Este time não existe', 'code' => 404], 404);
 		}
 
 		$equipe->nome = $request->nome;
@@ -70,6 +70,17 @@ class EquipeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id) {
-		//
+		$equipe = Equipe::find($id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Este time não existe', 'code' => 404], 404);
+		}
+
+		if ($equipe->jogadores()->count() > 0) {
+			return response()->json(['message' => 'Este Time ainda possue jogadores. Delete-os primeiro', 'code' => 409], 409);
+		}
+
+		$equipe->delete();
+		
+		return response()->json(['message' => 'Este Time foi deletado'], 200);
 	}
 }

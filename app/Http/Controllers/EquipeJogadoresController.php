@@ -89,10 +89,23 @@ class EquipeJogadoresController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int  $equipe_id
+	 * @param  int  $jogador_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
-		//
+	public function destroy($equipe_id, $jogador_id) {
+		$equipe = Equipe::find($equipe_id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Este time não existe', 'code' => 404], 404);
+		}
+
+		$jogador = $equipe->jogadores->find($jogador_id);
+		if (!$jogador) {
+			return response()->json(['message' => 'Este Jogador não existe', 'code' => 404], 404);
+		}
+
+		$jogador->delete();
+		
+		return response()->json(['message' => 'Este jogador foi deletado'], 200);
 	}
 }
