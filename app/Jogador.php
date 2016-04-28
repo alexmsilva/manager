@@ -8,7 +8,7 @@ class Jogador extends Model {
 	
 	protected $fillable = ['equipe_id','nome','numero','posicao'];
 	
-	protected $hidden = ['id','created_at','updated_at'];
+	protected $hidden = ['id','created_at','updated_at','equipe_id'];
 
 	public function equipe() {
 		return $this->belongsTo('App\Equipe');

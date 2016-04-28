@@ -4,14 +4,21 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Equipe;
+
 class EquipeJogadoresController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
-		//
+	public function index($id) {
+		$equipe = Equipe::find($id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		return response()->json(['data' => $equipe->jogadores], 200);
 	}
 
 	/**
@@ -30,8 +37,18 @@ class EquipeJogadoresController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
-		//
+	public function show($id, $jogador_id) {
+		$equipe = Equipe::find($id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		$jogador = $equipe->jogadores->find($jogador_id);
+		if (!$jogador) {
+			return response()->json(['message' => 'Esse jogador não existe', 'code' => 404], 404);
+		}
+
+		return response()->json(['data' => $jogador], 200);
 	}
 
 	/**
