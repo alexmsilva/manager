@@ -8,6 +8,11 @@ use App\Equipe;
 use App\Http\Requests\EquipeRequest;
 
 class EquipeController extends Controller {
+
+	public function __construct() {
+		$this->middleware('auth.basic', ['except' => ['index', 'show']]);
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -80,7 +85,7 @@ class EquipeController extends Controller {
 		}
 
 		$equipe->delete();
-		
+
 		return response()->json(['message' => 'Este Time foi deletado'], 200);
 	}
 }

@@ -4,14 +4,16 @@ use Illuminate\Database\Seeder;
 
 use App\User;
 
-class DatabaseSeeder extends Seeder {
+class UsersSeed extends Seeder {
 	/**
 	 * Run the database seeds.
 	 *
 	 * @return void
 	 */
 	public function run() {
-		User::truncate();
-		$this->call(UsersSeed::class);
+		User::create([
+			'email' => 'fake@user.com',
+			'password' => Hash::make('secret123')
+		]);
 	}
 }
