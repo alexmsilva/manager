@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Equipe;
+use App\Http\Requests\EquipeRequest;
 
 class EquipeController extends Controller {
 	/**
@@ -23,8 +24,9 @@ class EquipeController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
-		//
+	public function store(EquipeRequest $request) {
+		Equipe::create($request->only(['nome']));
+		return response()->json(['message' => 'Time cadastrado com sucesso'], 201);
 	}
 
 	/**
@@ -49,8 +51,16 @@ class EquipeController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
-		//
+	public function update(EquipeRequest $request, $id) {
+		$equipe = Equipe::find($id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		$equipe->nome = $request->nome;
+		$equipe->save();
+
+		return response()->json(['message' => 'A equipe foi atualizada com sucesso'], 200);
 	}
 
 	/**

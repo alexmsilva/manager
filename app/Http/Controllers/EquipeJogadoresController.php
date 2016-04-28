@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Equipe;
+use App\Http\Requests\JogadorRequest;
 
 class EquipeJogadoresController extends Controller {
 	/**
@@ -25,20 +26,29 @@ class EquipeJogadoresController extends Controller {
 	 * Store a newly created resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $equipe_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
-		//
+	public function store(JogadorRequest $request, $equipe_id) {
+		$equipe = Equipe::find($equipe_id);
+		if (!$equipe_id) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		$equipe->jogadores()->create($request->all());
+
+		return $response()->json(['message' => 'Jogador criado com sucesso'], 201);
 	}
 
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int  $equipe_id
+	 * @param  int  $jogador_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id, $jogador_id) {
-		$equipe = Equipe::find($id);
+	public function show($equipe_id, $jogador_id) {
+		$equipe = Equipe::find($equipe_id);
 		if (!$equipe) {
 			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
 		}
@@ -54,12 +64,26 @@ class EquipeJogadoresController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
+	 * @param  App\Http\Requests\JogadorRequest  $request
+	 * @param  int  $equipe_id
+	 * @param  int  $jogador_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
-		//
+	public function update(JogadorRequest $request, $equipe_id, $jogador_id) {
+		$equipe = Equipe::find($equipe_id);
+		if (!$equipe) {
+			return response()->json(['message' => 'Esse time não existe', 'code' => 404], 404);
+		}
+
+		$jogador = $equipe->jogadores->find($jogador_id);
+		if (!$jogador) {
+			return response()->json(['message' => 'Esse Jogador não existe', 'code' => 404], 404);
+		}
+
+		$jogador->fill($request->all());
+		$jogador->save();
+
+		return response()->json(['message' => 'Jogador atualizado com sucesso'], 200);
 	}
 
 	/**
