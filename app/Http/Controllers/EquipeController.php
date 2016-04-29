@@ -6,6 +6,7 @@ use App\Http\Requests;
 
 use App\Equipe;
 use App\Http\Requests\EquipeRequest;
+use Illuminate\Support\Facades\Cache;
 
 class EquipeController extends Controller {
 
@@ -19,7 +20,10 @@ class EquipeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$equipes = Equipe::all();
+		// cache de 2 minutos
+		$equipes = Cache::remember('equipes', 2, function() {
+			return Equipe::all();
+		});
 		return response()->json(['data' => $equipes], 200);
 	}
 
