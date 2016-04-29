@@ -22,9 +22,12 @@ class EquipeController extends Controller {
 	public function index() {
 		// cache de 2 minutos
 		$equipes = Cache::remember('equipes', 2, function() {
-			return Equipe::all();
+			return Equipe::simplePaginate(10);
 		});
-		return response()->json(['data' => $equipes], 200);
+		return response()->json([
+			'data' => $equipes->items(),
+			'next_page_url' => $equipes->nextPageUrl(),
+			'previous_page_url' => $equipes->previousPageUrl()], 200);
 	}
 
 	/**
