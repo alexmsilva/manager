@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-class Handler extends ExceptionHandler
-{
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+class Handler extends ExceptionHandler {
     /**
      * A list of the exception types that should not be reported.
      *
@@ -31,8 +32,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $e
      * @return void
      */
-    public function report(Exception $e)
-    {
+    public function report(Exception $e) {
         parent::report($e);
     }
 
@@ -43,8 +43,12 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
-    {
-        return parent::render($request, $e);
+    public function render($request, Exception $e) {
+        if ($e instanceof NotFoundHttpException) {
+            return response()->json(['message' => 'Bad request, please check your url request routes', 'code' => 400], 400);
+        }
+        else {
+            return response()->json(['message' => 'Unexpected error, please try again later', 'code' => 500], 500);
+        }
     }
 }
