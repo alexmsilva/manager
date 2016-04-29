@@ -11,6 +11,8 @@
 |
 */
 
-Route::resource('equipes', 'EquipeController', ['except' => ['edit', 'create']]);
-Route::resource('jogadores', 'JogadorController', ['only' => ['index']]);
-Route::resource('equipes.jogadores', 'EquipeJogadoresController', ['except' => ['edit', 'create']]);
+Route::group(['prefix' => 'api/v1'], function() {
+	Route::resource('equipes', 'EquipeController', ['except' => ['edit', 'create']]);
+	Route::resource('jogadores', 'JogadorController', ['only' => ['index']]);
+	Route::resource('equipes.jogadores', 'EquipeJogadoresController', ['except' => ['edit', 'create']]);
+});
