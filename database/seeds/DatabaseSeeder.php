@@ -11,7 +11,10 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		User::truncate();
+		//User::truncate();
+		//DB::table('oauth_clients')->truncate();
+
 		$this->call(UsersSeed::class);
+		//$this->call(ClientsSeed::class);
 	}
 }
