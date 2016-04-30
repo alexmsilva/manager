@@ -10,7 +10,7 @@ use App\Http\Requests\JogadorRequest;
 class EquipeJogadoresController extends Controller {
 
 	public function __construct() {
-		$this->middleware('auth.basic.once', ['except' => ['index', 'show']]);
+		$this->middleware('oauth', ['except' => ['index', 'show']]);
 	}
 
 	/**
